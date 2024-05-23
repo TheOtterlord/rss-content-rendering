@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content'
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts'
 import { experimental_AstroContainer as AstroContainer } from 'astro/container'
 import ContentWrapper from '../components/ContentWrapper.astro'
+import sanitizeHTML from 'sanitize-html'
 
 const container = await AstroContainer.create({
   renderers: [
@@ -22,9 +23,12 @@ export async function GET(context) {
 		site: context.site,
 		items: await Promise.all(
 			posts.map(async post => {
-				const content = (await container.renderToString(ContentWrapper, {
+				let content = (await container.renderToString(ContentWrapper, {
 					params: { slug: post.slug },
-				})).slice(15)
+				}))
+        content = sanitizeHTML(content, {
+          allowedTags: sanitizeHTML.defaults.allowedTags.concat(['img'])
+        })
 				return {
 					...post.data,
 					link: `/blog/${post.slug}/`,
