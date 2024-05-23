@@ -11,7 +11,7 @@ const container = await AstroContainer.create({
       name: '@astrojs/mdx',
       serverEntrypoint: 'astro/jsx/server.js',
     },
-    // you may have to add additional renderers if you use UI framework components in your blog
+    // you may need to add additional renderers if you use UI framework components in your blog
   ],
 })
 
